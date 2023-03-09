@@ -35,19 +35,23 @@ client.on("messageCreate", (msg) => {
   }
 
   if (msg.content === "Ene自我介紹一下") {
-    msg.channel.send(`你好呀！${user}！
+    msg.channel.send(`
+你好呀！${user}！
 我是目隱團NO.6的Ene！
-從主人的電腦那邊過來的唷！！
-只要有網路的地方
-我這個超級漂亮電腦美少女 Ene哪裡都可以去唷！`);
+從主人的電腦那邊跑過來的唷！！
+對於我這個超級漂亮電腦美少女Ene來說
+只要有網路的地方、不管哪裡都可以去唷！
+`);
   }
 
   if (msg.content === "エネ自己紹介して") {
-    msg.channel.send(`こんにちはっ！${user}！
+    msg.channel.send(`
+こんにちはっ！${user}！
 メカクシ団NO.6エネです！
 ご主人のパソコンからやってきましたっ！！
 ネットワークがあれば、
-この私、スーパープリティー電脳ガール エネちゃんがどこでも行けるよ！`);
+この私、スーパープリティー電脳ガール エネちゃんがどこでも行けるよ！
+`);
   }
 
   if (msg.content === "who") {
@@ -55,7 +59,24 @@ client.on("messageCreate", (msg) => {
     console.log(msg.author);
   }
   if (msg.content === "Ene 你的基本資訊") {
-    msg.channel.send(`名前	榎本貴音（エネ）
+    msg.channel.send(`
+名字	Ene
+目隱團團員	No.6
+楽曲	人造エネミー、エネの電脳紀行
+能力	目が覚める
+誕生日	不明
+年齢	19歳（精神年齢）
+身長	640pxl
+体重	2MB
+好きな映画	ゴッド◌ァーザー2、時計仕掛けのオ◌ンジ
+CV	阿澄佳奈
+イメージカラー	青
+`);
+  }
+
+  if (msg.content === "Eneのプロフィール") {
+    msg.channel.send(`
+名前	榎本貴音（エネ）
 メカクシ団団員	No.6
 楽曲	人造エネミー、エネの電脳紀行
 能力	目が覚める
@@ -65,6 +86,14 @@ client.on("messageCreate", (msg) => {
 体重	2MB
 好きな映画	ゴッド◌ァーザー2、時計仕掛けのオ◌ンジ
 CV	阿澄佳奈
-イメージカラー	青`);
+イメージカラー	青
+`);
+  }
+
+  if (msg.content === "Ene你說對吧?") {
+    msg.channel.send(`主人說的沒錯!!`);
+  }
+  if (msg.content === "ene晚安") {
+    msg.channel.send(`主人晚安!!`);
   }
 });

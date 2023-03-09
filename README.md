@@ -1,6 +1,7 @@
 # EneDiscordBot
 
 - nodemon
+- discord.js
 
 by Miguel
 

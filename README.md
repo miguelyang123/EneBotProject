@@ -1,5 +1,7 @@
 # EneDiscordBot
 
+- nodemon
+
 by Miguel
 
 ## Start Ene BOT

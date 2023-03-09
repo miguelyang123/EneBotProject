@@ -11,7 +11,7 @@ const client = new Client({
   ],
 });
 
-const TOKEN = process.env.TUTORTAL_BOT_TOKEN;
+const TOKEN = process.env.ENE_BOT_TOKEN;
 
 client.login(TOKEN);
 

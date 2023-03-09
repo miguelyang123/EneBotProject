@@ -1,3 +1,5 @@
 # EneDiscordBot
 
-## npm start
+## Start Ene BOT
+
+         npm start

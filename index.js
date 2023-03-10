@@ -1,7 +1,12 @@
 import { config } from "dotenv";
 import { Client, GatewayIntentBits } from "discord.js";
+import { Ene } from "./Ene.js";
 
 config();
+
+// allow  Channel
+const BOT_CHANNEL = ["1083661157342134363", "1083280839376384082"];
+const BOT_CATEGORY = "1083400573530951750";
 
 const client = new Client({
   intents: [
@@ -16,22 +21,34 @@ const TOKEN = process.env.ENE_BOT_TOKEN;
 client.login(TOKEN);
 
 client.on("ready", () => {
-  console.log(`${client.user.tag.split("#")[0]} was wake up!`);
+  console.log(
+    `\x1b[36m${client.user.tag.split("#")[0]}\x1b[0m` + "が起きました！"
+  );
+  Ene.sayGoodMorning();
 });
 
 client.on("messageCreate", (msg) => {
+  if (msg.author.bot) return;
+  if (
+    msg.channel.parent.id !== BOT_CATEGORY &&
+    BOT_CHANNEL.every((e) => e !== msg.channel.id)
+  )
+    return;
   // console.log(msg.content);
   // console.log(msg.author.tag);
 
-  const user = msg.author.tag.split("#")[0];
+  let user = msg.author.tag.split("#")[0];
+  if (user === "Miguel Yang") {
+    user = `主人`;
+  }
   // const user = msg.author;
 
   if (msg.content.toLocaleLowerCase() === "ene") {
-    msg.channel.send(`${user} 主人叫我嗎?`);
+    msg.channel.send(`${user} 叫我嗎?`);
   }
 
   if (msg.content === "エネ") {
-    msg.channel.send(`${user} ご主人呼んた?`);
+    msg.channel.send(`${user} 呼んた?`);
   }
 
   if (msg.content === "Ene自我介紹一下") {
@@ -91,9 +108,9 @@ CV	阿澄佳奈
   }
 
   if (msg.content === "Ene你說對吧?") {
-    msg.channel.send(`主人說的沒錯!!`);
+    msg.channel.send(`說的沒錯!!`);
   }
   if (msg.content === "ene晚安") {
-    msg.channel.send(`主人晚安!!`);
+    msg.channel.send(`${user}晚安!!`);
   }
 });

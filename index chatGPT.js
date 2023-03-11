@@ -1,14 +1,48 @@
 import { config } from "dotenv";
 import { Client, GatewayIntentBits } from "discord.js";
-import fs from "fs";
-import brain from "brain.js";
-const net = new brain.recurrent.LSTM({
-  // create a new neural net.
-  activation: "leaky-relu", // use this activation because. :)
-});
+const fs = require("fs");
+// import { OpenAIApi, Configuration } from "openai";
+// import { ChatGPT } from "discord-chat-gpt";
+import { ChatGPTAPI } from "chatgpt";
+import "isomorphic-fetch";
 import { Ene } from "./Ene.js";
 
 config();
+
+//ChatGPTAPI
+const api = new ChatGPTAPI({
+  apiKey: process.env.OPENAI_KEY,
+});
+
+// async function chatGPT(msg) {
+//   const api = new ChatGPTAPI({
+//     apiKey: process.env.OPENAI_KEY,
+//   });
+//   let text = "";
+//   try {
+//     const res = await api.sendMessage(msg);
+//     // console.log(res.text);
+//     text = res.text;
+//   } catch (err) {
+//     console.log(err);
+//   }
+// console.log(text);
+// return text;
+// }
+
+// OpenAI
+// const configuration = new Configuration({
+//   organization: process.env.OPEMAI_ORG,
+//   apiKey: process.env.OPENAI_KEY,
+// });
+
+// const openai = new OpenAIApi(Configuration);
+
+// discord-chat-gpt";
+// const chatGpt = new ChatGPT({
+//   apiKey: process.env.OPENAI_KEY, // get from https://beta.openai.com/account/api-keys
+//   orgKey: process.env.OPEMAI_ORG, // get from https://beta.openai.com/account/org-settings
+// });
 
 // allow Channel & Category
 const BOT_CHANNEL = ["1083661157342134363", "1083280839376384082"];
@@ -30,9 +64,6 @@ const client = new Client({
 client.login(BOT_TOKEN);
 
 client.on("ready", () => {
-  net.fromJSON(
-    JSON.parse(fs.readFileSync("Ene_Memory/neuralnet.json", "utf8"))
-  );
   console.log(
     `\x1b[36m${client.user.tag.split("#")[0]}\x1b[0m` + "が起きました！"
   );
@@ -48,6 +79,48 @@ client.on("messageCreate", async (message) => {
     return;
   // console.log(message.content);
   // console.log(message.author.tag);
+
+  // discord-chat-gpt";
+  // if (message.channel.parent.id !== BOT_CATEGORY) {
+  //   let message = await message.reply({
+  //     content: `Waiting ....`,
+  //   });
+  //   let chatreply = await chatGpt
+  //     .chat(message.content, message.author.username)
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  //   message.edit({
+  //     content: `${chatreply}`,
+  //   });
+  // }
+
+  //ChartGPT
+  // try {
+  //   const gptResponse = await openai.createChatCompletion({
+  //     modle: "davinci",
+  //     prompt: `ChatGPT is a friendly chatbot.\n\
+  // ChatGPT: Hello, how are you?\n\
+  // ${msg.author.username}:${msg.content}\n\
+  // ChatGPT:`,
+  //     temperature: 0.9,
+  //     max_tokens: 100,
+  //     stop: ["ChatGPT:", "Miguel Yang:"],
+  //   });
+  //   msg.reply(`${gptResponse.data.choices[0].text}`);
+  // } catch (err) {
+  //   console.log(err);
+  // }
+
+  //ChatGPTAPI
+
+  try {
+    const res = await api.sendMessage(message.content);
+    // console.log(res.text);
+    message.channel.send(res.text);
+  } catch (err) {
+    console.log(err);
+  }
 
   //Listening Message
   // try {

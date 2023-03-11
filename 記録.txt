@@ -42,3 +42,9 @@ Ene
 ```
 Ene自我介紹一下
 ```
+
+ChatGPT$
+500 T = 0.01
+
+
+TensorFlow.js、Brain.js和ConvNetJS

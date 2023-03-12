@@ -1,19 +1,29 @@
 import { Client, GatewayIntentBits } from "discord.js";
-import { config } from "dotenv";
+import * as dotenv from "dotenv";
+dotenv.config({ path: "TOKEN/.env" });
 import fs from "fs";
 import brain from "brain.js";
 const net = new brain.recurrent.LSTM({
   // create a new neural net.
   activation: "leaky-relu", // use this activation because. :)
 });
+
+import { useChatGpt } from "./useChatGPT.js";
 import { Ene } from "./Ene.js";
 
-config();
+import { ChatGPTAPI } from "chatgpt";
+import "isomorphic-fetch";
+//ChatGPTAPI
+// const api = new ChatGPTAPI({
+//   apiKey: process.env.OPENAI_KEY,
+// });
 
 // allow  Channel
 const BOT_CHANNEL = ["1083661157342134363", "1083280839376384082"];
 const BOT_CATEGORY = "1083400573530951750";
 // const ENE_ID ="1083258292719058944"
+
+const ご主人 = "<@518738504138752022>";
 
 const client = new Client({
   intents: [
@@ -37,8 +47,39 @@ client.on("ready", () => {
   Ene.sayGoodMorning();
 });
 
-client.on("messageCreate", (msg) => {
+client.on("messageCreate", async (msg) => {
+  //Not Bot
   if (msg.author.bot) return;
+
+  //ChatGPT
+  if (
+    msg.channel.id === "1084148533101351012" ||
+    msg.channel.id === "1083663732858699806"
+  ) {
+    // const res = await api.sendMessage(msg.content);
+    // console.log(res.text);
+    // msg.channel.send(res.text);
+
+    // let gptMsg = useChatGpt(msg.content);
+
+    // msg.channel.send(gptMsg);
+    await msg.channel.sendTyping().then(() => {
+      useChatGpt(msg.content)
+        .then(async (gptMsg) => {
+          let eneMsg = gptMsg.replace("ChatGPT", "エネ");
+          await msg.channel.send(eneMsg);
+        })
+        .catch((err) => {
+          msg.channel.send(
+            `我好像出了問題，${ご主人}快幫我更新!!:confounded: `
+          );
+          console.log(err);
+        });
+    });
+
+    // console.log(gptMsg);
+  }
+
   if (
     msg.channel.parent.id !== BOT_CATEGORY &&
     BOT_CHANNEL.every((e) => e !== msg.channel.id)
@@ -52,16 +93,13 @@ client.on("messageCreate", (msg) => {
     user = `主人`;
   }
   // const user = msg.author;
+  // msg.channel.sendTyping();
 
   if (msg.content.toLocaleLowerCase() === "ene") {
     msg.channel.send(`${user} 叫我嗎?`);
-  }
-
-  if (msg.content === "エネ") {
+  } else if (msg.content === "エネ") {
     msg.channel.send(`${user} 呼んた?`);
-  }
-
-  if (msg.content === "Ene自我介紹一下") {
+  } else if (msg.content === "Ene自我介紹一下") {
     msg.channel.send(`
   你好呀！${user}！
   我是目隱團NO.6的Ene！
@@ -69,9 +107,7 @@ client.on("messageCreate", (msg) => {
   對於我這個超級漂亮電腦美少女Ene來說
   只要有網路的地方、不管哪裡都可以去唷！
   `);
-  }
-
-  if (msg.content === "エネ自己紹介して") {
+  } else if (msg.content === "エネ自己紹介して") {
     msg.channel.send(`
   こんにちはっ！${user}！
   メカクシ団NO.6エネです！
@@ -79,13 +115,10 @@ client.on("messageCreate", (msg) => {
   ネットワークがあれば、
   この私、スーパープリティー電脳ガール エネちゃんがどこでも行けるよ！
   `);
-  }
-
-  if (msg.content === "who") {
+  } else if (msg.content === "who") {
     msg.channel.send(`${msg.author}`);
     console.log(msg.author);
-  }
-  if (msg.content === "Ene 你的基本資訊") {
+  } else if (msg.content === "Ene 你的基本資訊") {
     msg.channel.send(`
   名字	Ene
   目隱團團員	No.6
@@ -95,13 +128,11 @@ client.on("messageCreate", (msg) => {
   年齢	19歳（精神年齢）
   身長	640pxl
   体重	2MB
-  好きな映画	ゴッド◌ァーザー2、時計仕掛けのオ◌ンジ
+  喜歡的電影	ゴッド◌ァーザー2、時計仕掛けのオ◌ンジ
   CV	阿澄佳奈
-  イメージカラー	青
+  代表色	青
   `);
-  }
-
-  if (msg.content === "Eneのプロフィール") {
+  } else if (msg.content === "Eneのプロフィール") {
     msg.channel.send(`
   名前	榎本貴音（エネ）
   メカクシ団団員	No.6
@@ -115,14 +146,20 @@ client.on("messageCreate", (msg) => {
   CV	阿澄佳奈
   イメージカラー	青
   `);
-  }
-
-  if (msg.content === "Ene你說對吧?") {
+  } else if (msg.content === "Ene你說對吧?") {
     msg.channel.send(`說的沒錯!!`);
-  }
-  if (msg.content === "ene晚安") {
+  } else if (msg.content === "Ene晚安") {
     msg.channel.send(`${user}晚安!!`);
+  } else if (msg.content.split(" ")[0] === "Ene說") {
+    msg.channel.send(`${msg.content.split(" ")[1]}`);
+  } else if (msg.content === "測試錯誤") {
+    msg.channel.send(
+      `我好像出了問題，${ご主人}快幫我更新!! <a:Ene:1084435873019461632>`
+    );
   }
+  // else {
+  //   msg.channel.send(`?`);
+  // }
 
   //AI-Chat-bot
   if (
@@ -145,7 +182,7 @@ client.on("messageCreate", (msg) => {
 | These lists can be added to for more     |
 | randomness in the responses.             |
 \******************************************/
-var hello_reply = ["hi", "sup?", "yo", "hello"];
+var hello_reply = ["hi", "sup?", "你好", "hello"];
 var bye_reply = ["bye", "cya", "good bye"];
 var lol_reply = ["lol", "lmao", "heh", "funny"];
 var weather_reply = [

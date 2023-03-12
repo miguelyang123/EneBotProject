@@ -12,8 +12,10 @@
   "license": "ISC",
   "dependencies": {
     "brain.js": "^2.0.0-beta.18",
+    "chatgpt": "^5.0.10",
     "discord.js": "^14.7.1",
-    "dotenv": "^16.0.3"
+    "dotenv": "^16.0.3",
+    "isomorphic-fetch": "^3.0.0"
   },
   "type": "module"
 }

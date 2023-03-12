@@ -11,8 +11,8 @@ const net = new brain.recurrent.LSTM({
 import { useChatGpt } from "./useChatGPT.js";
 import { Ene } from "./Ene.js";
 
-import { ChatGPTAPI } from "chatgpt";
-import "isomorphic-fetch";
+// import { ChatGPTAPI } from "chatgpt";
+// import "isomorphic-fetch";
 //ChatGPTAPI
 // const api = new ChatGPTAPI({
 //   apiKey: process.env.OPENAI_KEY,
@@ -63,19 +63,31 @@ client.on("messageCreate", async (msg) => {
     // let gptMsg = useChatGpt(msg.content);
 
     // msg.channel.send(gptMsg);
-    await msg.channel.sendTyping().then(() => {
-      useChatGpt(msg.content)
-        .then(async (gptMsg) => {
-          let eneMsg = gptMsg.replace("ChatGPT", "エネ");
-          await msg.channel.send(eneMsg);
-        })
-        .catch((err) => {
-          msg.channel.send(
-            `我好像出了問題，${ご主人}快幫我更新!!:confounded: `
-          );
-          console.log(err);
-        });
-    });
+    // Send a basic message
+
+    try {
+      let timeoutID = setInterval(() => msg.channel.sendTyping(), 10000);
+      let gptMsg = await useChatGpt(msg.content);
+      let eneMsg = gptMsg.replace("ChatGPT", "エネ");
+      await msg.channel.send(eneMsg);
+      clearInterval(timeoutID);
+    } catch (err) {
+      msg.channel.send(Ene.sayIsError(ご主人));
+      console.log(err);
+    }
+
+    // msg.channel.sendTyping().then(() => {
+
+    // await useChatGpt(msg.content)
+    //   .then((gptMsg) => {
+    //     let eneMsg = gptMsg.replace("ChatGPT", "エネ");
+    //     msg.channel.send(eneMsg);
+    //   })
+    //   .catch((err) => {
+    //     msg.channel.send(`我好像出了問題，${ご主人}快幫我更新!! :confounded: `);
+    //     console.log(err);
+    //   });
+    // });
 
     // console.log(gptMsg);
   }
@@ -153,9 +165,7 @@ client.on("messageCreate", async (msg) => {
   } else if (msg.content.split(" ")[0] === "Ene說") {
     msg.channel.send(`${msg.content.split(" ")[1]}`);
   } else if (msg.content === "測試錯誤") {
-    msg.channel.send(
-      `我好像出了問題，${ご主人}快幫我更新!! <a:Ene:1084435873019461632>`
-    );
+    msg.channel.send(Ene.sayIsError(ご主人));
   }
   // else {
   //   msg.channel.send(`?`);
